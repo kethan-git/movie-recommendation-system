@@ -1,27 +1,26 @@
-# 🎬 Lights, Camera, Algorithm
-### A Hybrid Movie Recommendation System Using K-Means, FP-Growth, and Random Forest on MovieLens 1M
+# A Hybrid Movie Recommendation System Using K-Means, FP-Growth, and Random Forest on MovieLens 1M
 
-> *Replicating the core logic behind Netflix's recommendation engine — one algorithm at a time.*
+> *Replicating the core logic behind Netflix's recommendation engine (Not as complex ofcourse, but this gives you the idea :)).*
 
 ---
 
 ## The Idea
 
-Every time Netflix suggests something you end up loving, there's a machine learning pipeline working behind the scenes. It knows what you've watched, what people like you have watched, and what tends to be watched together. This project sets out to understand and replicate that logic from scratch — using a publicly available dataset, open-source tools, and a pipeline built entirely on interpretable machine learning.
+Every time Netflix suggests something you end up loving, there's a machine learning pipeline working behind the scenes. It knows what you've watched, what people like you have watched, and what tends to be watched together. This project sets out to understand and replicate that logic from scratch - using a publicly available dataset, open-source tools, and a pipeline built entirely on interpretable machine learning.
 
-We didn't use deep learning. We didn't use black-box embeddings. We used K-Means, FP-Growth, and Random Forest — and we built something that actually works.
+We didn't use deep learning. We didn't use black-box embeddings. We used K-Means, FP-Growth, and Random Forest.
 
 ---
 
 ## The Dataset
 
-**MovieLens 1M** — collected and maintained by GroupLens Research, University of Minnesota.
+**MovieLens 1M** - collected and maintained by GroupLens Research, University of Minnesota.
 
 | File | Contents |
 |---|---|
 | `movies.dat` | 3,883 movies with titles and pipe-separated genres |
 | `ratings.dat` | 1,000,209 ratings on a 1–5 scale from 6,040 users |
-| `users.dat` | User demographics — gender, age bracket, occupation, zip code |
+| `users.dat` | User demographics: gender, age bracket, occupation, zip code |
 
 > Download: https://grouplens.org/datasets/movielens/1m/
 > The dataset files are not included in this repository as redistribution is prohibited under the GroupLens license.
@@ -42,7 +41,7 @@ The project follows a six-phase pipeline where each stage feeds directly into th
                             │
                             ▼
 ┌─────────────────────────────────────────────────────────────┐
-│  PHASE 1 — Data Loading & Preprocessing                     │
+│  PHASE 1: Data Loading & Preprocessing                     │
 │  Merge movies, ratings, users into one master dataframe.    │
 │  Map age/occupation codes. Extract release years.           │
 │  Correct two confirmed genre tagging errors.                │
@@ -50,14 +49,14 @@ The project follows a six-phase pipeline where each stage feeds directly into th
                             │
                             ▼
 ┌─────────────────────────────────────────────────────────────┐
-│  PHASE 2 — Exploratory Data Analysis                        │
+│  PHASE 2: Exploratory Data Analysis                        │
 │  Rating distributions, genre analysis, demographic spread,  │
 │  top-rated vs most-rated movies, activity over time.        │
 └───────────────────────────┬─────────────────────────────────┘
                             │
                             ▼
 ┌─────────────────────────────────────────────────────────────┐
-│  PHASE 3 — K-Means Movie Clustering (Unsupervised)          │
+│  PHASE 3: K-Means Movie Clustering (Unsupervised)          │
 │  One-hot encode 18 genres. Scale features.                  │
 │  Elbow Method + Silhouette Score → Optimal K = 5.           │
 │  PCA 2D visualisation of cluster separation.                │
@@ -65,7 +64,7 @@ The project follows a six-phase pipeline where each stage feeds directly into th
                             │
                             ▼
 ┌─────────────────────────────────────────────────────────────┐
-│  PHASE 4 — FP-Growth Co-watch Pattern Mining                │
+│  PHASE 4: FP-Growth Co-watch Pattern Mining                │
 │  Build per-user transaction baskets (liked movies).         │
 │  Top 300 movies · min_support = 0.05 · max_len = 2.        │
 │  4,732 association rules from 10,865 frequent itemsets.     │
@@ -73,7 +72,7 @@ The project follows a six-phase pipeline where each stage feeds directly into th
                             │
                             ▼
 ┌─────────────────────────────────────────────────────────────┐
-│  PHASE 5 — Supervised Classification                        │
+│  PHASE 5: Supervised Classification                        │
 │  26 features: demographics, personalisation, genre flags.   │
 │  Logistic Regression · Decision Tree · Random Forest.       │
 │  RandomizedSearchCV tuning · Evaluated on 200K records.     │
@@ -81,7 +80,7 @@ The project follows a six-phase pipeline where each stage feeds directly into th
                             │
                             ▼
 ┌─────────────────────────────────────────────────────────────┐
-│  PHASE 6 — Hybrid Recommendation Engine                     │
+│  PHASE 6: Hybrid Recommendation Engine                     │
 │  User-Based CF (cosine similarity) → candidate pool.        │
 │  FP-Growth rules → additional candidates.                   │
 │  Random Forest scores each candidate.                       │
@@ -106,7 +105,7 @@ Used to group movies into five behavioural categories based on genre composition
 | 4 | Documentaries | 121 |
 
 ### FP-Growth Association Rule Mining
-Each user's liked movies form a transaction basket. FP-Growth mines co-watch patterns — the machine learning equivalent of *"people who watched this also watched..."*
+Each user's liked movies form a transaction basket. FP-Growth mines co-watch patterns - the machine learning equivalent of *"people who watched this also watched..."*
 
 **Top Association Rules by Lift:**
 
@@ -132,7 +131,7 @@ A binary like/dislike target (rating >= 3.5 = Like) is predicted using three cla
 | Decision Tree (Tuned) | 72.31% | 0.7734 | 0.6440 | 0.7184 |
 | **Random Forest (Tuned)** | **72.42%** | **0.7751** | **0.6435** | **0.7192** |
 
-> All three models converged to approximately 72% accuracy — a finding that reveals the performance ceiling is **feature-driven rather than model-driven**. Human taste in movies is inherently subjective, and no increase in model complexity alone is likely to substantially break this ceiling without richer behavioural data.
+> All three models converged to approximately 72% accuracy - a finding that reveals the performance ceiling is **feature-driven rather than model-driven**. Human taste in movies is inherently subjective, and no increase in model complexity alone is likely to substantially break this ceiling without richer behavioural data.
 
 ---
 
@@ -142,11 +141,11 @@ A few discoveries stood out during this project that are worth highlighting:
 
 **The franchise effect is real.** FP-Growth independently discovered that franchise films drive co-watching more powerfully than any other signal. Die Hard, Star Trek, Mad Max, and Lethal Weapon all produced their highest-confidence rules within their own franchise.
 
-**Popularity ≠ Quality.** American Beauty is the most-rated movie in the dataset. Seven Samurai has the highest average rating. These two lists share almost no overlap — a finding that shaped how we engineered features for the classifier.
+**Popularity ≠ Quality.** American Beauty is the most-rated movie in the dataset. Seven Samurai has the highest average rating. These two lists share almost no overlap - a finding that shaped how we engineered features for the classifier.
 
-**Data quality matters more than model complexity.** Adding just two user-level personalisation features — `user_avg_rating` and `user_num_ratings` — improved all three models by approximately 3.5-4%. This outperformed any gain from hyperparameter tuning.
+**Data quality matters more than model complexity.** Adding just two user-level personalisation features - `user_avg_rating` and `user_num_ratings` - improved all three models by approximately 3.5-4%. This outperformed any gain from hyperparameter tuning.
 
-**Genre-based clustering has limits.** The Star Wars films were distributed across four different clusters because each episode has a distinct genre composition. This is not a bug — it is a genuine insight that motivated the addition of collaborative filtering to the pipeline.
+**Genre-based clustering has limits.** The Star Wars films were distributed across four different clusters because each episode has a distinct genre composition. This is not a bug - it is a genuine insight that motivated the addition of collaborative filtering to the pipeline.
 
 ---
 
@@ -159,7 +158,7 @@ A few discoveries stood out during this project that are worth highlighting:
 | User 100 | Male · 35-44 · Engineer | Terminator, Alien, Die Hard, Hunt for Red October |
 | User 42 | Male · 25-34 · Farmer | Saving Private Ryan, Braveheart, Gladiator, Goldfinger |
 
-Each user receives a completely distinct list — a direct result of combining collaborative filtering with content-based signals.
+Each user receives a completely distinct list - a direct result of combining collaborative filtering with content-based signals.
 
 ---
 
@@ -187,20 +186,6 @@ Each user receives a completely distinct list — a direct result of combining c
 5. Run all cells sequentially from Phase 1 through Phase 6
 
 ---
-
-## Project Structure
-
-```
-netflix-movie-recommendation-system/
-│
-├── Netflix_MRS_Polished.ipynb       # Main notebook — all 6 phases
-├── Netflix_MRS_Business_Report.docx # Full business report
-├── README.md                        # This file
-│
-└── data/
-    └── README.md                    # Dataset download instructions
-```
-
 ---
 
 ## Acknowledgements
