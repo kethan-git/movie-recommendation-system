@@ -1,0 +1,44 @@
+# Dataset files — redistribution prohibited under GroupLens license
+data/*.dat
+data/*.csv
+data/*.zip
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environments
+venv/
+env/
+.env/
+.venv/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Output plots (optional — remove these lines if you want to commit your charts)
+*.png
+*.jpg
+*.jpeg
+
+# Google Colab credentials
+token.json
+credentials.json
