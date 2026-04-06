@@ -4,6 +4,10 @@
 
 ---
 
+**Link to run a live demo of the site:** *https://huggingface.co/spaces/kethanr/movie-recommender* 
+
+---
+
 ## The Idea
 
 Every time Netflix suggests something you end up loving, there's a machine learning pipeline working behind the scenes. It knows what you've watched, what people like you have watched, and what tends to be watched together. This project sets out to understand and replicate that logic from scratch - using a publicly available dataset, open-source tools, and a pipeline built entirely on interpretable machine learning.
